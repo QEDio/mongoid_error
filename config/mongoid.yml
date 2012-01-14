@@ -1,0 +1,11 @@
+defaults: &defaults
+  host: localhost
+  port: 27017
+
+development:
+  <<: *defaults
+  database: mongodb_development_123
+
+test:
+  <<: *defaults
+  database: mongodb_test_123
