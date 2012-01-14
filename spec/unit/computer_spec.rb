@@ -88,7 +88,6 @@ describe Computer do
     # looking good
     puts "#{part2}: reloaded second setting: #{part2.inspect}"
 
-    
     part2.description2.should_not be_nil
     part2.description2.should == PART_DATA2
   end
