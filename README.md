@@ -10,32 +10,32 @@ Run the spec with: rake
 
 What?
 ----------------
+    
+    class Computer
+      include Mongoid::Document
+      embeds_many :parts
+    end
 
-class Computer
-  include Mongoid::Document
-  embeds_many :parts
-end
+    class Part
+      include Mongoid::Document
+      embedded_in :computer
 
-class Part
-  include Mongoid::Document
-  embedded_in :computer
-
-  field :description1, type: Array
-  field :description2
-end
+      field :description1, type: Array
+      field :description2
+    end
 
 This fails:
 --------------------------
-computer = Computer.new
-part = Part.new
+    computer = Computer.new
+    part = Part.new
 
-computer.parts << part
-computer.save
+    computer.parts << part
+    computer.save
 
-part.description1 = PART_DATA1
-part.save
+    part.description1 = PART_DATA1
+    part.save
 
-part.description1 = PART_DATA2
-part.save
+    part.description1 = PART_DATA2
+    part.save
 
 ==> now part.description1 is null (in the db)
