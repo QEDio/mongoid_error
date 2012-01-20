@@ -1,8 +1,8 @@
-Mongoid Error with embedded_in and type: Array
+Object-Data getting lost
 ========================
 
-When embedding a document within another, and declaring a field within the embedded document as type: Array, setting this
-field fails after the first time.
+When iterating with a cursor over a set of Mongoid Documents, the changes to those objects are lost outside the loop.
+Is this the expected behaviour?
 
 Please have a look at 'spec/computer_spec.rb'
 
@@ -10,32 +10,24 @@ Run the spec with: rake
 
 What?
 ----------------
-    
     class Computer
       include Mongoid::Document
-      embeds_many :parts
-    end
-
-    class Part
-      include Mongoid::Document
-      embedded_in :computer
-
-      field :description1, type: Array
-      field :description2
+      field :active, type: Boolean
+      field :dirty, type: Boolean
     end
 
 This fails:
 --------------------------
-    computer = Computer.new
-    part = Part.new
+     computers = Computer.all
+     # computers = Computer.all.to_a fixes the problem
 
-    computer.parts << part
-    computer.save
+     computers.each do |c|
+       c.active = true
+       c.dirty = false
+     end
 
-    part.description1 = PART_DATA1
-    part.save
+     computers.each do |c|
+       c.save
+     end
 
-    part.description1 = PART_DATA2
-    part.save
-
-==> now part.description1 is null (in the db)
+     # nothing gets updated
